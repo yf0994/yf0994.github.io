@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Feng yin Blog</title>
+  <title>Android的Init进程(一) | Feng yin Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Feng yin Blog">
-<meta property="og:url" content="http://fengyinlove.com/index.html">
+  <meta name="description" content="Init进程是Linux内核启动后创建的第一个用户进程，地位非常重要。Init进程在初始化过程中会启动很多重要的守护进程，因此，了解Init进程的启动过程将有助于我们更好的理解Android系统。Init进程除了完成系统的初始化之外，本身也是一个守护进程，担负着系统部分很重要的职责。Android的启动过程可分为bootloader引导、装载和启动Linux内核、启动Android系统3个大的阶段">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android的Init进程(一)">
+<meta property="og:url" content="http://fengyinlove.com/2016/01/19/Android的Init进程/index.html">
 <meta property="og:site_name" content="Feng yin Blog">
-<meta property="og:description">
+<meta property="og:description" content="Init进程是Linux内核启动后创建的第一个用户进程，地位非常重要。Init进程在初始化过程中会启动很多重要的守护进程，因此，了解Init进程的启动过程将有助于我们更好的理解Android系统。Init进程除了完成系统的初始化之外，本身也是一个守护进程，担负着系统部分很重要的职责。Android的启动过程可分为bootloader引导、装载和启动Linux内核、启动Android系统3个大的阶段">
+<meta property="og:updated_time" content="2016-01-19T10:46:42.763Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Feng yin Blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Android的Init进程(一)">
+<meta name="twitter:description" content="Init进程是Linux内核启动后创建的第一个用户进程，地位非常重要。Init进程在初始化过程中会启动很多重要的守护进程，因此，了解Init进程的启动过程将有助于我们更好的理解Android系统。Init进程除了完成系统的初始化之外，本身也是一个守护进程，担负着系统部分很重要的职责。Android的启动过程可分为bootloader引导、装载和启动Linux内核、启动Android系统3个大的阶段">
   
     <link rel="alternate" href="/atom.xml" title="Feng yin Blog" type="application/atom+xml">
   
@@ -60,9 +61,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Android的Init进程" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Android的Init进程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/01/19/Android的Init进程/" class="article-date">
   <time datetime="2016-01-19T10:22:32.000Z" itemprop="datePublished">2016-01-19</time>
@@ -75,8 +74,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/19/Android的Init进程/">Android的Init进程(一)</a>
+    <h1 class="article-title" itemprop="name">
+      Android的Init进程(一)
     </h1>
   
 
@@ -105,10 +104,9 @@
     </footer>
   </div>
   
-</article>
-
-
+    
   
+</article>
 
 </section>
         
