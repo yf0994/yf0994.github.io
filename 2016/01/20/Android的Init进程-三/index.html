@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://fengyinlove.com/2016/01/20/Android的Init进程-三/index.html">
 <meta property="og:site_name" content="Feng yin Blog">
 <meta property="og:description" content="在main()函数的for循环中，会调用restart_processes()函数来启动服务列表中的服务进程。函数restart_processes()的代码如下所示：123456...static void restart_processes()&amp;#123;    process_needs_restart = 0;    service_for_each_flags(SVC_RESTARTIN">
-<meta property="og:updated_time" content="2016-01-20T12:04:07.096Z">
+<meta property="og:updated_time" content="2016-01-20T12:56:51.240Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android的Init进程(三)">
 <meta name="twitter:description" content="在main()函数的for循环中，会调用restart_processes()函数来启动服务列表中的服务进程。函数restart_processes()的代码如下所示：123456...static void restart_processes()&amp;#123;    process_needs_restart = 0;    service_for_each_flags(SVC_RESTARTIN">
@@ -20,7 +20,7 @@
     <link rel="alternative" href="/atom.xml" title="Feng yin Blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="img/bitbug_favicon.ico">
+    <link rel="icon" href="/img/bitbug_favicon.ico">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
@@ -33,7 +33,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="img/favicon.jpg" class="js-avatar">
+			<img lazy-src="/img/favicon.jpg" class="js-avatar">
 			
 		</a>
 
@@ -134,7 +134,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="img/favicon.jpg" class="js-avatar">
+				<img lazy-src="/img/favicon.jpg" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -200,6 +200,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在<strong><em>main()</em></strong>函数的for循环中，会调用<strong><em>restart_processes()</em></strong>函数来启动服务列表中的服务进程。函数restart_processes()的代码如下所示：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">restart_processes</span><span class="params">()</span></span>&#123;</span><br><span class="line">    process_needs_restart = <span class="number">0</span>;</span><br><span class="line">    service_for_each_flags(SVC_RESTARTING,</span><br><span class="line">                           restart_service_if_needed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <p>上面的代码中<strong><em>service_for_each_flags()</em></strong>函数会检查service_list列表中的每个服务，凡是带有SVC_RESTARTING标志的，都会使用该服务作为参数调用<strong><em>restart_service_if_needed()</em></strong>函数。<strong><em>restart_serevice_if_needed()</em></strong>函数中会调用<strong><em>service_start()</em></strong>函数来启动服务，我们主要关心的是init如何启动的服务进程，中间的代码就不分析了，直接看<strong><em>service_start()</em></strong>函数的代码。<br>1 重置Service结构中的标志<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">service_start</span><span class="params">(<span class="keyword">struct</span> service *svc, <span class="keyword">const</span> <span class="keyword">char</span> *dynamic_args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/* starting a service removes it from the disabled or reset</span><br><span class="line">     * state and immediately takes it out of the restarting</span><br><span class="line">     * state if it was in there</span><br><span class="line">     */</span></span><br><span class="line">    svc-&gt;flags &amp;= (~(SVC_DISABLED|SVC_RESTARTING|SVC_RESET|SVC_RESTART|SVC_DISABLED_START));</span><br><span class="line">    svc-&gt;time_started = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* running processes require no additional work -- if</span><br><span class="line">         * they're in the process of exiting, we've ensured</span><br><span class="line">         * that they will immediately restart on exit, unless</span><br><span class="line">         * they are ONESHOT</span><br><span class="line">         */</span></span><br><span class="line">    <span class="keyword">if</span> (svc-&gt;flags &amp; SVC_RUNNING) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong><em>SVC_DISABLED、SVC_RESTARTING、SVC_RESET、SVC_RESTART</em></strong>这4个标志都是和启动进程相关，需要先清除掉。如果服务带有<strong><em>SVC_RUNNING</em></strong>标志，说明服务进程已经运行，这里就不重复启动了。<br>2 如果服务需要有控制台，但是还没有启动控制台就退出<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">needs_console = (svc-&gt;flags &amp; SVC_CONSOLE) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line"><span class="keyword">if</span> (needs_console &amp;&amp; (!have_console)) &#123;</span><br><span class="line">    ERROR(<span class="string">"service '%s' requires console\n"</span>, svc-&gt;name);</span><br><span class="line">    svc-&gt;flags |= SVC_DISABLED;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
 <p>上面的代码中<strong><em>have_console</em></strong>是一个全局变量，在函数<strong><em>console_init_action()</em></strong>中，如果打开设备文件<strong><em>/dev/console</em></strong>成功，它会被置为1。<br>3 检查service的二进制文件是否存在<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">if</span> (stat(svc-&gt;args[<span class="number">0</span>], &amp;s) != <span class="number">0</span>) &#123;</span><br><span class="line">    ERROR(<span class="string">"cannot find '%s', disabling '%s'\n"</span>, svc-&gt;args[<span class="number">0</span>], svc-&gt;name);</span><br><span class="line">    svc-&gt;flags |= SVC_DISABLED;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
@@ -219,6 +220,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2016/01/20/SystemServer的创建过程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          SystemServer的创建过程
+        
+      </div>
+    </a>
   
   
     <a href="/2016/01/19/Android的Init进程-二/" id="article-nav-older" class="article-nav-link-wrap">
