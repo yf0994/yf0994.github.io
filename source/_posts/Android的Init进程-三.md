@@ -12,6 +12,7 @@ static void restart_processes(){
                            restart_service_if_needed);
 }
 ```
+<!--more-->
 上面的代码中***service_for_each_flags()***函数会检查service_list列表中的每个服务，凡是带有SVC_RESTARTING标志的，都会使用该服务作为参数调用***restart_service_if_needed()***函数。***restart_serevice_if_needed()***函数中会调用***service_start()***函数来启动服务，我们主要关心的是init如何启动的服务进程，中间的代码就不分析了，直接看***service_start()***函数的代码。
 1 重置Service结构中的标志
 ```c

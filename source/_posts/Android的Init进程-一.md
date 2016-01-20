@@ -6,6 +6,7 @@ tags: Android系统
 Init进程是Linux内核启动后创建的第一个用户进程，地位非常重要。Init进程在初始化过程中会启动很多重要的守护进程，因此，了解Init进程的启动过程将有助于我们更好的理解Android系统。Init进程除了完成系统的初始化之外，本身也是一个守护进程，担负着系统部分很重要的职责。
 Android的启动过程可分为bootloader引导、装载和启动Linux内核、启动Android系统3个大的阶段。其中Android系统启动还可以细分为启动***Init进程、启动Zygote进程、启动SystemService、启动SystemServer、启动Home***等多个阶段。
 下面简单介绍设备的启动过程。
+<!--more-->
 ### (1) Bootloader引导
 当我们按下手机的电源键时，最先运行的就是***bootloader***。Bootloader主要的作用就是初始化基本的硬件设备（如CPU、内存、Flash等）并且通过建立内存空间映射，为装载Linux内核准备好合适的运行环境。一旦Linux内核装载完毕，bootloader将会从内存中清除掉。
 如果用户在Bootloader运行期间，按下预定义的组合键，可以进入系统的更新模块。Android的下载更新可以选择进入Fastboot模式或者Recovery模式。
