@@ -251,7 +251,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p><strong><em>SystemServer</em></strong>的创建过程可以分成两个部分，一部分是在<strong><em>Zygote</em></strong>进程中<strong><em>fork</em></strong>并初始化<strong><em>SystemServer</em></strong>进程，另一部分是执行<strong><em>SystemServer</em></strong>类的<strong><em>main</em></strong>方法来启动系统服务。<strong><em>init.rc</em></strong>文件中定义的<strong><em>Zygote</em></strong>进程的启动参数包括了<code>—start-system-server</code>,因此，在ZygoteInit类的main方法里会调用<code>startSystemServer()</code>方法来启动SystemServer。startSystemServer()方法的代码如下：<br>
       
     </div>
     
@@ -264,6 +264,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/20/SystemServer的创建过程/#more">Read more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
