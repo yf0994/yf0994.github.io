@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android系统/" style="font-size: 10px;">Android系统</a>
+						<a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
 					</div>
 				</section>
 				
@@ -173,6 +173,8 @@
     </div>
   
   <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
       <header class="article-header">
@@ -290,11 +292,13 @@
 </footer>
     </div>
     
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
 
 <script>
 	var yiliaConfig = {
-		fancybox: undefined,
-		mathjax: undefined,
+		fancybox: true,
+		mathjax: true,
 		animate: true,
 		isHome: false,
 		isPost: true,
@@ -310,6 +314,27 @@
 
 
 
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
   </div>

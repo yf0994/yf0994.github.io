@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android系统/" style="font-size: 10px;">Android系统</a>
+						<a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
 					</div>
 				</section>
 				
@@ -175,6 +175,37 @@
           <a href="/archives/2016" class="archive-year">2016</a>
         </div>
         <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2016/01/21/vpn-和-shadowsocks-的区别/" class="archive-article-date">
+  	<time datetime="2016-01-21T01:46:59.000Z" itemprop="datePublished">1月 21</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2016/01/21/vpn-和-shadowsocks-的区别/">vpn 和 shadowsocks 的区别</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络/">网络</a></li></ul>
+	</div>
+
+          
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
     
     <article class="archive-article archive-type-post">
   <div class="archive-article-inner">
@@ -316,11 +347,13 @@
 </footer>
     </div>
     
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
 
 <script>
 	var yiliaConfig = {
-		fancybox: undefined,
-		mathjax: undefined,
+		fancybox: true,
+		mathjax: true,
 		animate: true,
 		isHome: false,
 		isPost: false,
@@ -336,6 +369,27 @@
 
 
 
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
   </div>
