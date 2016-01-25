@@ -4,6 +4,7 @@ date: 2016-01-20 20:34:28
 tags: Android系统
 ---
 ***SystemServer***的创建过程可以分成两个部分，一部分是在***Zygote***进程中***fork***并初始化***SystemServer***进程，另一部分是执行***SystemServer***类的***main***方法来启动系统服务。***init.rc***文件中定义的***Zygote***进程的启动参数包括了`—start-system-server`,因此，在ZygoteInit类的main方法里会调用`startSystemServer()`方法来启动SystemServer。startSystemServer()方法的代码如下：
+<!--more-->
 ```java
 private static boolean startSystemServer(String abiList, String socketName)
             throws MethodAndArgsCaller, RuntimeException {
