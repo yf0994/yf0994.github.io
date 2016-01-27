@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>SystemServer中的WatchDog | Feng yin Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在SystemServer中创建WatchDog对象的代码如下:1234...final Watchdog watchdog = Watchdog.getInstance();watchdog.init(context, mActivityManagerService);...
+Watchdog是单实例的运行模式。第一次调用getInstance()会生成Watchdog的对象并保存到全局变量sW">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SystemServer中的WatchDog">
+<meta property="og:url" content="http://fengyinlove.com/2016/01/27/SystemServer中的WatchDog/index.html">
+<meta property="og:site_name" content="Feng yin Blog">
+<meta property="og:description" content="在SystemServer中创建WatchDog对象的代码如下:1234...final Watchdog watchdog = Watchdog.getInstance();watchdog.init(context, mActivityManagerService);...
+Watchdog是单实例的运行模式。第一次调用getInstance()会生成Watchdog的对象并保存到全局变量sW">
+<meta property="og:updated_time" content="2016-01-27T12:27:57.124Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SystemServer中的WatchDog">
+<meta name="twitter:description" content="在SystemServer中创建WatchDog对象的代码如下:1234...final Watchdog watchdog = Watchdog.getInstance();watchdog.init(context, mActivityManagerService);...
+Watchdog是单实例的运行模式。第一次调用getInstance()会生成Watchdog的对象并保存到全局变量sW">
+  
+    <link rel="alternative" href="/atom.xml" title="Feng yin Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/bitbug_favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/favicon.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">fengyin</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/yf0994/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">Read the fucking code!</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">fengyin</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/favicon.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">fengyin</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yf0994/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-SystemServer中的WatchDog" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/27/SystemServer中的WatchDog/" class="article-date">
+  	<time datetime="2016-01-27T11:58:58.000Z" itemprop="datePublished">2016-01-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SystemServer中的WatchDog
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<strong><em>SystemServer</em></strong>中创建<strong><em>WatchDog</em></strong>对象的代码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">final</span> Watchdog watchdog = Watchdog.getInstance();</span><br><span class="line">watchdog.init(context, mActivityManagerService);</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>Watchdog</em></strong>是单实例的运行模式。第一次调用<code>getInstance()</code>会生成<strong><em>Watchdog</em></strong>的对象并保存到全局变量<strong><em>sWatchdog</em></strong>，再次调用时返回的保存的值。<strong><em>WatchDog</em></strong>的构造方法如下：<br><a id="more"></a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Watchdog</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(<span class="string">"watchdog"</span>);</span><br><span class="line">    mMonitorChecker = <span class="keyword">new</span> HandlerChecker(FgThread.getHandler(),</span><br><span class="line">            <span class="string">"foreground thread"</span>, DEFAULT_TIMEOUT);</span><br><span class="line">    mHandlerCheckers.add(mMonitorChecker);</span><br><span class="line">    mHandlerCheckers.add(newHandlerChecker(<span class="keyword">new</span> Handler(Looper.getMainLooper()),</span><br><span class="line">                <span class="string">"main thread"</span>, DEFAULT_TIMEOUT));</span><br><span class="line">    mHandlerCheckers.add(<span class="keyword">new</span> HandlerChecker(UiThread.getHandler(),</span><br><span class="line">                <span class="string">"ui thread"</span>, DEFAULT_TIMEOUT));</span><br><span class="line">    mHandlerCheckers.add(<span class="keyword">new</span> HandlerChecker(IoThread.getHandler(),</span><br><span class="line">                <span class="string">"i/o thread"</span>, DEFAULT_TIMEOUT));</span><br><span class="line">    mHandlerCheckers.add(<span class="keyword">new</span> HandlerChecker(DisplayThread.getHandler(),</span><br><span class="line">                <span class="string">"display thread"</span>, DEFAULT_TIMEOUT));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>Watchdog</em></strong>的构造方法的主要工作是创建了几个<strong><em>HandlerChecker</em></strong>对象，并把它们保存到数组列表<strong><em>mHandlerCheckers</em></strong>中。每个<strong><em>HandlerChecker</em></strong>对象对应一个被监控的线程。<strong><em>HandlerChecker</em></strong>类从<strong><em>Handler</em></strong>类派生，它在构造时就和被监控的线程关联到一起了。<br>除了在<strong><em>Watchdog</em></strong>的构造方法中构建的<strong><em>HandlerChecker</em></strong>对象外，还可以通过调用<strong><em>Watchdog</em></strong>类的<code>addThread()</code>方法来增加被监控的线程。<strong><em>WatchDog</em></strong>对象创建后，接下来会调用<code>init()</code>方法进行初始化，方法的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context, ActivityManagerService activity)</span> </span>&#123;</span><br><span class="line">    mResolver = context.getContentResolver();</span><br><span class="line">    mActivity = activity;</span><br><span class="line">    context.registerReceiver(<span class="keyword">new</span> RebootRequestReceiver(),</span><br><span class="line">            <span class="keyword">new</span> IntentFilter(Intent.ACTION_REBOOT),</span><br><span class="line">            android.Manifest.permission.REBOOT, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>init()</code>方法注册了<strong><em>RebootRequestReceive</em></strong>，监听重启的<strong><em>intent：ACTION_REBOOT</em></strong>。<br><strong><em>Watchdog</em></strong>主要监控线程。在<strong><em>SystemServer</em></strong>进程中运行着许多的线程，它们负责处理一些重要模块的消息。如果一个线程陷入了死循环或者和其他线程相互死锁了，<strong><em>Watchdog</em></strong>需要有办法识别出它们。<strong><em>Watchdog</em></strong>中提供的两个方法<code>addThread()</code>和<code>addMonitor()</code>分别用来增加需要监控的线程和服务。<code>addThread()</code>实际是在创建一个和受监控对象关联的<strong><em>HandlerChecker</em></strong>对象，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addThread</span><span class="params">(Handler thread, <span class="keyword">long</span> timeoutMillis)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (isAlive()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Threads can't be added once the Watchdog is running"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">final</span> String name = thread.getLooper().getThread().getName();</span><br><span class="line">        mHandlerCheckers.add(<span class="keyword">new</span> HandlerChecker(thread, name, timeoutMillis));</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对服务的监控也是由<strong><em>HandlerChecker</em></strong>对象来完成。一个<strong><em>HandlerChecker</em></strong>对象就可以检查所有服务。因此，<strong><em>Watchdog让mMonitorChecker</em></strong>对象来完成这个任务。<code>addMonitor()</code>的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMonitor</span><span class="params">(Monitor monitor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (isAlive()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Monitors can't be added once the Watchdog is running"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        mMonitorChecker.addMonitor(monitor);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>Watchdog</em></strong>的<code>addMonitor()</code>方法只是调用了<strong><em>mMonitorChecker</em></strong>对象的<code>addMonitor()</code>方法。在<strong><em>Watchdog</em></strong>的构造方法中，把5个公共线程加入到了监控列表中。<br><strong><em>(1) MainThread<br>(2) FgThread<br>(3) UiThread<br>(4) IoThread<br>(5) DisplayThread</em></strong><br><strong><em>SystemServer</em></strong>中一些重要的服务拥有专用的线程来处理消息。同时<strong><em>SystemServer</em></strong>也启动了几个线程来为所有服务处理消息。这三个线程并没有太大区别，只是<strong><em>UiThread</em></strong>线程的优先级是<strong><em>THREAD_PRIORITY_FOREGROUND</em></strong>，而<strong><em>FgThread</em></strong>和<strong><em>IoThread</em></strong>线程的优先级是<strong><em>THREAD_PRORITY_DEFAULT</em></strong>而已。除了这5个公共线程外，一些重要服务的专用线程也加入到了监控中，包括:<br><strong><em>(1) ActivitiyManagerService的AThread线程。<br>(2) PackageManagerService的mHandlerThread变量表示的线程。<br>(3) PowerManagerService的线程。<br>(4) WindowManagerService的wmHandlerThread变量表示的线程。</em></strong><br>如果一个服务需要通过Watchdog来监控，它必须首先要实现<strong><em>Watchdog</em></strong>的接口<strong><em>Monitor</em></strong>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Monitor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">monitor</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后还要调用<strong><em>Watchdog</em></strong>类的<code>addMonitor()</code>方法把它自己加入到<strong><em>Watchdog</em></strong>的服务监控列表中，在<strong><em>SystemServer</em></strong>中实现了<strong><em>Monitor</em></strong>接口并调用了<code>addMonitor()</code>方法的服务有：<br><strong><em>(1) ActivityManagerService<br>(2) InputManagerService<br>(3) MediaRouterService<br>(4) MountService<br>(5) NativeDaemonConnector<br>(6) NetworkManagementService<br>(7) PowerManagerService<br>(8) WindowManagerService</em></strong><br>运行在<strong><em>Binder</em></strong>线程中的方法如果需要使用了全局的资源，就必须建立临界区来实施保护。通常的做法是使用<strong><em>synchronized</em></strong>关键字。通过给线程发送消息可以判断一个线程是否运行正常，如果发送的消息不能在规定的时间内得到处理，就表明线程被不正常占用了。Watchdog运行在一个单独的线程中，它的线程执行方法run()的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> waitedHalf = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        <span class="keyword">final</span> ArrayList&lt;HandlerChecker&gt; blockedCheckers;</span><br><span class="line">        <span class="keyword">final</span> String subject;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> allowRestart;</span><br><span class="line">        <span class="keyword">int</span> debuggerWasConnected = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="keyword">long</span> timeout = CHECK_INTERVAL;</span><br><span class="line">			<span class="comment">//给监控的线程发送消息</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;mHandlerCheckers.size(); i++) &#123;</span><br><span class="line">                HandlerChecker hc = mHandlerCheckers.get(i);</span><br><span class="line">                hc.scheduleCheckLocked();</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//休眠一段时间</span></span><br><span class="line">            <span class="keyword">if</span> (debuggerWasConnected &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                debuggerWasConnected--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">long</span> start = SystemClock.uptimeMillis();</span><br><span class="line">            <span class="keyword">while</span> (timeout &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (Debug.isDebuggerConnected()) &#123;</span><br><span class="line">                    debuggerWasConnected = <span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    wait(timeout);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    Log.wtf(TAG, e);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (Debug.isDebuggerConnected()) &#123;</span><br><span class="line">                    debuggerWasConnected = <span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                timeout = CHECK_INTERVAL - (SystemClock.uptimeMillis() - start);</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//检查是否有线程或服务出现问题了</span></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> waitState = evaluateCheckerCompletionLocked();</span><br><span class="line">            <span class="keyword">if</span> (waitState == COMPLETED) &#123;</span><br><span class="line">                waitedHalf = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (waitState == WAITING) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (waitState == WAITED_HALF) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!waitedHalf) &#123;</span><br><span class="line">                    ArrayList&lt;Integer&gt; pids = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">                    pids.add(Process.myPid());</span><br><span class="line">                    ActivityManagerService.dumpStackTraces(<span class="keyword">true</span>, pids, <span class="keyword">null</span>, <span class="keyword">null</span>, NATIVE_STACKS_OF_INTEREST);</span><br><span class="line">                    waitedHalf = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">         ...</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//杀死SystemServer</span></span><br><span class="line">            Process.killProcess(Process.myPid());</span><br><span class="line">            System.exit(<span class="number">10</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        waitedHalf = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>run()</code>方法中有一个无限循环，每次循环中主要做三件事。<br>(1) 调用<code>scheduleCheckLocked()</code>方法给所有受监控的线程发送消息。<code>shceduleCheckLocked()</code>方法的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">scheduleCheckLocked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mMonitors.size() == <span class="number">0</span> &amp;&amp; mHandler.getLooper().isIdling()) &#123;</span><br><span class="line">        mCompleted = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!mCompleted) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    mCompleted = <span class="keyword">false</span>;</span><br><span class="line">    mCurrentMonitor = <span class="keyword">null</span>;</span><br><span class="line">    mStartTime = SystemClock.uptimeMillis();</span><br><span class="line">    mHandler.postAtFrontOfQueue(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>HandlerChecker</em></strong>对象既要监控服务，又要监控线程，因此，上面的代码先判断<strong><em>mMonitors</em></strong>的<strong><em>size</em></strong>是否为0。如果为0，说明这个<strong><em>HandlerChecker</em></strong>没有监控服务，这是如果被监控的消息队列处于空闲状态，说明线程运行良好，把<strong><em>mComplete</em></strong>设为<strong><em>true</em></strong>后就可以返回了。否则先把<strong><em>mComplete</em></strong>设为<strong><em>false</em></strong>，然后纪录消息开始发送的时间到变量<strong><em>mStartTime</em></strong>中，最后调用<code>postAtFrontOfQueue()</code>方法给被监控的线程发送一个消息，这个消息处理的方法是<strong><em>HandlerChecker</em></strong>类的<code>run()</code>，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> size = mMonitors.size();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; size ; i++) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (Watchdog.<span class="keyword">this</span>) &#123;</span><br><span class="line">            mCurrentMonitor = mMonitors.get(i);</span><br><span class="line">        &#125;</span><br><span class="line">        mCurrentMonitor.monitor();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">synchronized</span> (Watchdog.<span class="keyword">this</span>) &#123;</span><br><span class="line">        mCompleted = <span class="keyword">true</span>;</span><br><span class="line">        mCurrentMonitor = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果消息处理方法<code>run()</code>能够执行，说明受监控的线程本身没有问题，但是还需要检查被监控服务的状态。检查是通过调用服务中实现的<code>monitor()</code>方法来完成的。通常<code>monitor()</code>方法的实现是获取系统服务的锁，如果不能得到，线程就会挂起，这样<strong><em>mComplete</em></strong>的值就不能置为<strong><em>true</em></strong>了。<br>    <strong><em>mComplete</em></strong>的值为<strong><em>true</em></strong>，表明<strong><em>HandlerChecker</em></strong>对象监控的线程或服务正常，否则就可能会有问题。是有真有问题还要通过等待的时间是否超过规定时间来判断。<br>(2) 给受监控的线程发送完消息后，调用<code>wait()</code>方法让<strong><em>watchdog</em></strong>线程休眠一段时间。<br>(3) 逐个检查是否有线程或服务出现问题了，一旦发现问题，马上杀死进程。<br>前面的代码调用了方法<code>evaluateCheckerCompletionLocked()</code>来检查线程或服务是否有问题。<code>evaluateCheckerCompletionLocket()</code>方法的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">evaluateCheckerCompletionLocked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> state = COMPLETED;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;mHandlerCheckers.size(); i++) &#123;</span><br><span class="line">        HandlerChecker hc = mHandlerCheckers.get(i);</span><br><span class="line">        state = Math.max(state, hc.getCompletionStateLocked());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> state;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>evaluateCheckerCompletionLocked()</code>调用每个检查对象的<code>getCompletionStateLocked()</code>方法来得到对象的状态。状态值有4种。<br><strong>(1) COMPLETED</strong>：值为0，表示状态良好。<br><strong>(2) WAITING</strong>：值为1，表示正在等待消息处理的结果。<br><strong>(3) WAITED_HALF</strong>：值为2，表示正在等待并且等待的时间超过规定时间的一半。<br><strong>(4) OVERDUE</strong>：值为3，表示等待时间已经超过规定时间。<br><code>evaluateCheckerCompletionLocked()</code>方法希望知道的是最坏的情况，因此，上面的代码使用<strong><em>Math.max</em></strong>来计算出所有监控对象的最坏情况。从上面的代码种可以看出返回的状态值只要不是<strong><em>OVERDUE</em></strong>都可以继续执行，否则就杀死<strong><em>System</em></strong>进程。<br>其实使用3种状态就足够了：<strong><em>COMPLETED、WAITING、和OVERDUE</em></strong>。<strong><em>WAIT_HALF</em></strong>这种状态是为了性调试。如果某个线程或服务的执行时间超过了规定时间的一半，表明可能会出现问题，系统就会把它的信息输出到Log中。<br><code>getCompletionStateLocked()</code>函数用来返回<strong><em>HandlerChecker</em></strong>对象的状态，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCompletionStateLocked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mCompleted) &#123;</span><br><span class="line">        <span class="keyword">return</span> COMPLETED;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">long</span> latency = SystemClock.uptimeMillis() - mStartTime;</span><br><span class="line">        <span class="keyword">if</span> (latency &lt; mWaitMax/<span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> WAITING;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (latency &lt; mWaitMax) &#123;</span><br><span class="line">            <span class="keyword">return</span> WAITED_HALF;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> OVERDUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从<code>getCompletionStateLocked()</code>函数的代码中我们可以看出，它正是通过时间来判断被监控对象的状况。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/01/26/Zygote进程-二/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Zygote进程(二)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="SystemServer中的WatchDog" data-title="SystemServer中的WatchDog" data-url="http://fengyinlove.com/2016/01/27/SystemServer中的WatchDog/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 fengyin
+    	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

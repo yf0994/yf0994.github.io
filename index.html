@@ -165,6 +165,67 @@
 
       <div class="body-wrap">
   
+    <article id="post-SystemServer中的WatchDog" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/27/SystemServer中的WatchDog/" class="article-date">
+  	<time datetime="2016-01-27T11:58:58.000Z" itemprop="datePublished">2016-01-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/27/SystemServer中的WatchDog/">SystemServer中的WatchDog</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<strong><em>SystemServer</em></strong>中创建<strong><em>WatchDog</em></strong>对象的代码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">final</span> Watchdog watchdog = Watchdog.getInstance();</span><br><span class="line">watchdog.init(context, mActivityManagerService);</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>Watchdog</em></strong>是单实例的运行模式。第一次调用<code>getInstance()</code>会生成<strong><em>Watchdog</em></strong>的对象并保存到全局变量<strong><em>sWatchdog</em></strong>，再次调用时返回的保存的值。<strong><em>WatchDog</em></strong>的构造方法如下：<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/27/SystemServer中的WatchDog/#more">Read more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Zygote进程-二" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
