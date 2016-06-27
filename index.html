@@ -165,6 +165,66 @@
 
       <div class="body-wrap">
   
+    <article id="post-广播注册接收流程分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/23/广播注册接收流程分析/" class="article-date">
+  	<time datetime="2016-06-23T11:09:09.000Z" itemprop="datePublished">2016-06-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/23/广播注册接收流程分析/">广播注册接收流程分析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Android系统中，广播是一种在组件之间进行消息传递的方式，这些组件可以运行在一个进程中，也可以运行在不同的进程中。广播的类型分为静态广播和动态广播，静态广播的注册是在Apk安装的时候通过PMS来进行安装的，动态广播是通过registerReceiver()方法来安装的，下面来分析动态广播的注册过程。<br>注册动态广播需要来调用Context中的registerReceiver()方法，其中实现是在ContextImpl中的registerReceiver()中来注册的。在ContextImpl的registerReceiver()方法中调用了registerReceiverInternal()方法来执行的，下面来看registerReceiverInternal()方法的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Intent <span class="title">registerReceiverInternal</span><span class="params">(BroadcastReceiver receiver, <span class="keyword">int</span> userId,</span><br><span class="line">        IntentFilter filter, String broadcastPermission,</span><br><span class="line">        Handler scheduler, Context context)</span> </span>&#123;</span><br><span class="line">    IIntentReceiver rd = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (receiver != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mPackageInfo != <span class="keyword">null</span> &amp;&amp; context != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (scheduler == <span class="keyword">null</span>) &#123;</span><br><span class="line">                scheduler = mMainThread.getHandler();</span><br><span class="line">            &#125;</span><br><span class="line">            rd = mPackageInfo.getReceiverDispatcher(</span><br><span class="line">                receiver, context, scheduler,</span><br><span class="line">                mMainThread.getInstrumentation(), <span class="keyword">true</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (scheduler == <span class="keyword">null</span>) &#123;</span><br><span class="line">                scheduler = mMainThread.getHandler();</span><br><span class="line">            &#125;</span><br><span class="line">            rd = <span class="keyword">new</span> LoadedApk.ReceiverDispatcher(</span><br><span class="line">                    receiver, context, scheduler, <span class="keyword">null</span>, <span class="keyword">true</span>).getIIntentReceiver();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ActivityManagerNative.getDefault().registerReceiver(</span><br><span class="line">                mMainThread.getApplicationThread(), mBasePackageName,</span><br><span class="line">                rd, filter, broadcastPermission, userId);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/23/广播注册接收流程分析/#more">Read more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Activity的启动流程分析（二）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -689,66 +749,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/01/20/SystemServer的创建过程/#more">Read more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android的Init进程-三" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/20/Android的Init进程-三/" class="article-date">
-  	<time datetime="2016-01-20T02:20:43.000Z" itemprop="datePublished">2016-01-20</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/20/Android的Init进程-三/">Android的Init进程(三)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在<strong><em>main()</em></strong>函数的for循环中，会调用<strong><em>restart_processes()</em></strong>函数来启动服务列表中的服务进程。函数restart_processes()的代码如下所示：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">restart_processes</span><span class="params">()</span></span>&#123;</span><br><span class="line">    process_needs_restart = <span class="number">0</span>;</span><br><span class="line">    service_for_each_flags(SVC_RESTARTING,</span><br><span class="line">                           restart_service_if_needed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/20/Android的Init进程-三/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>
