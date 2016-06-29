@@ -165,6 +165,66 @@
 
       <div class="body-wrap">
   
+    <article id="post-Service启动流程分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/28/Service启动流程分析/" class="article-date">
+  	<time datetime="2016-06-28T02:03:54.000Z" itemprop="datePublished">2016-06-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/28/Service启动流程分析/">Service启动流程分析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Service组件是Android应用程序的四大组件之一，不过与Activity不一样，它主要用来处理与界面无关的业务逻辑。由于Service组件不与用户直接交互，所以它涉及的业务逻辑一般都是计算型的，适合在后台运行。<br>我们知道启动Service有两种形式，一种是通过调用startService()来启动Service，另一种是通过bindService()来绑定Service。我们先来看startService()这种情况。startService()是通过调用Context的startService()来启动的，它又调用了startServiceCommon()方法，下面来看startServiceCommon()方法的代码：<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/28/Service启动流程分析/#more">Read more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-广播注册接收流程分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -689,66 +749,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/01/21/vpn-和-shadowsocks-的区别/#more">Read more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-SystemServer的创建过程" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/20/SystemServer的创建过程/" class="article-date">
-  	<time datetime="2016-01-20T12:34:28.000Z" itemprop="datePublished">2016-01-20</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/20/SystemServer的创建过程/">SystemServer的创建过程</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong><em>SystemServer</em></strong>的创建过程可以分成两个部分，一部分是在<strong><em>Zygote</em></strong>进程中<strong><em>fork</em></strong>并初始化<strong><em>SystemServer</em></strong>进程，另一部分是执行<strong><em>SystemServer</em></strong>类的<strong><em>main</em></strong>方法来启动系统服务。<strong><em>init.rc</em></strong>文件中定义的<strong><em>Zygote</em></strong>进程的启动参数包括了<code>—start-system-server</code>,因此，在ZygoteInit类的main方法里会调用<code>startSystemServer()</code>方法来启动SystemServer。startSystemServer()方法的代码如下：<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/20/SystemServer的创建过程/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Service启动流程分析 | Feng yin Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Service组件是Android应用程序的四大组件之一，不过与Activity不一样，它主要用来处理与界面无关的业务逻辑。由于Service组件不与用户直接交互，所以它涉及的业务逻辑一般都是计算型的，适合在后台运行。我们知道启动Service有两种形式，一种是通过调用startService()来启动Service，另一种是通过bindService()来绑定Service。我们先来看start">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Service启动流程分析">
+<meta property="og:url" content="http://fengyinlove.com/2016/06/28/Service启动流程分析/index.html">
+<meta property="og:site_name" content="Feng yin Blog">
+<meta property="og:description" content="Service组件是Android应用程序的四大组件之一，不过与Activity不一样，它主要用来处理与界面无关的业务逻辑。由于Service组件不与用户直接交互，所以它涉及的业务逻辑一般都是计算型的，适合在后台运行。我们知道启动Service有两种形式，一种是通过调用startService()来启动Service，另一种是通过bindService()来绑定Service。我们先来看start">
+<meta property="og:updated_time" content="2016-06-29T03:12:50.793Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Service启动流程分析">
+<meta name="twitter:description" content="Service组件是Android应用程序的四大组件之一，不过与Activity不一样，它主要用来处理与界面无关的业务逻辑。由于Service组件不与用户直接交互，所以它涉及的业务逻辑一般都是计算型的，适合在后台运行。我们知道启动Service有两种形式，一种是通过调用startService()来启动Service，另一种是通过bindService()来绑定Service。我们先来看start">
+  
+    <link rel="alternative" href="/atom.xml" title="Feng yin Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/bitbug_favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/favicon.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">fengyin</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/yf0994/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">Read the fucking code!</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">fengyin</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/favicon.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">fengyin</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yf0994/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Service启动流程分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/28/Service启动流程分析/" class="article-date">
+  	<time datetime="2016-06-28T02:03:54.000Z" itemprop="datePublished">2016-06-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Service启动流程分析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Service组件是Android应用程序的四大组件之一，不过与Activity不一样，它主要用来处理与界面无关的业务逻辑。由于Service组件不与用户直接交互，所以它涉及的业务逻辑一般都是计算型的，适合在后台运行。<br>我们知道启动Service有两种形式，一种是通过调用startService()来启动Service，另一种是通过bindService()来绑定Service。我们先来看startService()这种情况。startService()是通过调用Context的startService()来启动的，它又调用了startServiceCommon()方法，下面来看startServiceCommon()方法的代码：<br><a id="more"></a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> ComponentName <span class="title">startServiceCommon</span><span class="params">(Intent service, UserHandle user)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        ComponentName cn = ActivityManagerNative.getDefault().startService(</span><br><span class="line">            mMainThread.getApplicationThread(), service,</span><br><span class="line">            service.resolveTypeIfNeeded(getContentResolver()), user.getIdentifier());</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> cn;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>startServiceCommon()方法中，通过调用了AMS中的startService()来启动Service，但是注意第一个参数，它是IApplicationThread类型的，这个参数前面已经多次提到，是用来从AMS进程转移到应用程序进程的Binder接口。在AMS的startService()方法中又调用了ActiveService中的startServiceLocked()方法，下面来看startServiceLocked()方法的代码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ComponentName <span class="title">startServiceLocked</span><span class="params">(IApplicationThread caller,</span><br><span class="line">            Intent service, String resolvedType,</span><br><span class="line">            <span class="keyword">int</span> callingPid, <span class="keyword">int</span> callingUid, <span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> callerFg;</span><br><span class="line">    <span class="keyword">if</span> (caller != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">final</span> ProcessRecord callerApp = mAm.getRecordForAppLocked(caller);</span><br><span class="line">        <span class="keyword">if</span> (callerApp == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(</span><br><span class="line">                    <span class="string">"Unable to find app for caller "</span> + caller</span><br><span class="line">                    + <span class="string">" (pid="</span> + Binder.getCallingPid()</span><br><span class="line">                    + <span class="string">") when starting service "</span> + service);</span><br><span class="line">        &#125;</span><br><span class="line">        callerFg = callerApp.setSchedGroup != Process.THREAD_GROUP_BG_NONINTERACTIVE;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        callerFg = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ServiceLookupResult res =</span><br><span class="line">            retrieveServiceLocked(service, resolvedType,</span><br><span class="line">                callingPid, callingUid, userId, <span class="keyword">true</span>, callerFg);</span><br><span class="line">    <span class="keyword">if</span> (res == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (res.record == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ComponentName(<span class="string">"!"</span>, res.permission != <span class="keyword">null</span></span><br><span class="line">                ? res.permission : <span class="string">"private to package"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    ServiceRecord r = res.record;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> startServiceInnerLocked(smap, service, r, callerFg, addToStarting);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在startServiceLocked()方法中首先检查了要启动的Service是否是前台进程，然后通过retrieveServiceLocked()方法来获取ServiceLookupResult这个对象，这个对象保存了两个属性，一个是权限permission，一个是ServiceRecord，看到ServiceRecord，是不是想到了启动Activity时的ActivityRecord和发送广播时的BroadcastRecord，它的作用和这两个一样，是用来描述一个Service的。最后调用了startServiceInnerLocked()方法继续启动Service。在startServiceInnerLocked()方法中接着调用了realStartServiceLocked()方法来真正启动Service。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">realStartServiceLocked</span><span class="params">(ServiceRecord r,</span><br><span class="line">            ProcessRecord app, <span class="keyword">boolean</span> execInFg)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">boolean</span> created = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (LOG_SERVICE_START_STOP) &#123;</span><br><span class="line">            String nameTerm;</span><br><span class="line">            <span class="keyword">int</span> lastPeriod = r.shortName.lastIndexOf(<span class="string">'.'</span>);</span><br><span class="line">            nameTerm = lastPeriod &gt;= <span class="number">0</span> ? r.shortName.substring(lastPeriod) : r.shortName;</span><br><span class="line">            EventLogTags.writeAmCreateService(</span><br><span class="line">                    r.userId, System.identityHashCode(r), nameTerm, r.app.uid, r.app.pid);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">synchronized</span> (r.stats.getBatteryStats()) &#123;</span><br><span class="line">            r.stats.startLaunchedLocked();</span><br><span class="line">        &#125;</span><br><span class="line">        mAm.ensurePackageDexOpt(r.serviceInfo.packageName);</span><br><span class="line">        app.forceProcessStateUpTo(ActivityManager.PROCESS_STATE_SERVICE);</span><br><span class="line">        app.thread.scheduleCreateService(r, r.serviceInfo,</span><br><span class="line">                mAm.compatibilityInfoForPackageLocked(r.serviceInfo.applicationInfo),</span><br><span class="line">                app.repProcState);</span><br><span class="line">        r.postNotification();</span><br><span class="line">        created = <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (DeadObjectException e) &#123;</span><br><span class="line">        Slog.w(TAG, <span class="string">"Application dead when creating service "</span> + r);</span><br><span class="line">        mAm.appDiedLocked(app);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!created) &#123;</span><br><span class="line">            app.services.remove(r);</span><br><span class="line">            r.app = <span class="keyword">null</span>;</span><br><span class="line">            scheduleServiceRestartLocked(r, <span class="keyword">false</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    requestServiceBindingsLocked(r, execInFg);</span><br><span class="line">    ...</span><br><span class="line">    sendServiceArgsLocked(r, execInFg, <span class="keyword">true</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从代码中可以看到，首先调用了IApplicationThread中的scheduleCreateService()方法，准备从AMS进程转移到应用程序进程来创建Service，接着调用了requestServiceBindingsLocked()方法准备来绑定服务，这里通过startService()这种方式来启动的，所以不执行这个方法，最后是调用sendServiceLocked()方法，看这个方法名应该是给Serivce发送参数的，Service接收参数的方法有onStartCommand()，估计是调用了它，后面会分析到。先来看schduleCreateService()方法，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">scheduleCreateService</span><span class="params">(IBinder token,</span><br><span class="line">                ServiceInfo info, CompatibilityInfo compatInfo, <span class="keyword">int</span> processState)</span> </span>&#123;</span><br><span class="line">    updateProcessState(processState, <span class="keyword">false</span>);</span><br><span class="line">    CreateServiceData s = <span class="keyword">new</span> CreateServiceData();</span><br><span class="line">    s.token = token;</span><br><span class="line">    s.info = info;</span><br><span class="line">    s.compatInfo = compatInfo;</span><br><span class="line">    sendMessage(H.CREATE_SERVICE, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>首先创建了一个CreateServiceData类型的对象，然后给它赋值，最后发送了一个类型为CREATE_SERVICE的消息，并且把新创建的对象一起发送了。前面说过在ActivityThread中有个H类型的变量，它是处理各种消息类型的handler，这里发送了CREATE_SERVICE的消息，所以只看CREATE_SERVICE的处理方法就行，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(msg.what)&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">case</span> CREATE_SERVICE:</span><br><span class="line">            Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, <span class="string">"serviceCreate"</span>);</span><br><span class="line">            handleCreateService((CreateServiceData)msg.obj);</span><br><span class="line">            Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里只是调用了handleCreateService()方法来处理这个消息，接着看handleCreateService()方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handleCreateService</span><span class="params">(CreateServiceData data)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    LoadedApk packageInfo = getPackageInfoNoCheck(</span><br><span class="line">        data.info.applicationInfo, data.compatInfo);</span><br><span class="line">    Service service = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        java.lang.ClassLoader cl = packageInfo.getClassLoader();</span><br><span class="line">        service = (Service) cl.loadClass(data.info.name).newInstance();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mInstrumentation.onException(service, e)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                <span class="string">"Unable to instantiate service "</span> + data.info.name</span><br><span class="line">                + <span class="string">": "</span> + e.toString(), e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (localLOGV) Slog.v(TAG, <span class="string">"Creating service "</span> + data.info.name);</span><br><span class="line">        ContextImpl context = ContextImpl.createAppContext(<span class="keyword">this</span>, packageInfo);</span><br><span class="line">        context.setOuterContext(service);</span><br><span class="line">        Application app = packageInfo.makeApplication(<span class="keyword">false</span>, mInstrumentation);</span><br><span class="line">        service.attach(context, <span class="keyword">this</span>, data.info.name, data.token, app,</span><br><span class="line">                ActivityManagerNative.getDefault());</span><br><span class="line">        service.onCreate();</span><br><span class="line">        mServices.put(data.token, service);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ActivityManagerNative.getDefault().serviceDoneExecuting(</span><br><span class="line">                    data.token, SERVICE_DONE_EXECUTING_ANON, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">            <span class="comment">// nothing to do.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mInstrumentation.onException(service, e)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                <span class="string">"Unable to create service "</span> + data.info.name</span><br><span class="line">                + <span class="string">": "</span> + e.toString(), e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在handleCreateService()方法中首先根据ApplicationInfo和CompatibilityInfo来获取了LoadedApk这个对象，然后通过反射的形式新生成Service()对象，并且为新生成的Service对象设置上下文对象Context，接着从LoadedApk这个对象中获取了应用程序的Application对象，并调用attach()方法来绑定一些初始化参数，最后调用了Service中的onCreate()方法来完成Service的创建过程。<br>现在回过头来看sendServiceArgsLocked()方法，其代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">sendServiceArgsLocked</span><span class="params">(ServiceRecord r, <span class="keyword">boolean</span> execInFg,</span><br><span class="line">            <span class="keyword">boolean</span> oomAdjusted)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> N = r.pendingStarts.size();</span><br><span class="line">    <span class="keyword">if</span> (N == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (r.pendingStarts.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ...</span><br><span class="line">            r.app.thread.scheduleServiceArgs(r, si.taskRemoved, si.id, flags, si.intent);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">            <span class="comment">// Remote process gone...  we'll let the normal cleanup take</span></span><br><span class="line">            <span class="comment">// care of this.</span></span><br><span class="line">            <span class="keyword">if</span> (DEBUG_SERVICE) Slog.v(TAG, <span class="string">"Crashed while scheduling start: "</span> + r);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            Slog.w(TAG, <span class="string">"Unexpected exception"</span>, e);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在sendServiceArgsLocked()方法中调用了scheduleServiceArgs()方法来发送参数。在scheduleServiceArgs()方法中发送了一个类型为SERVICE_ARGS的消息，然后消息的处理方法handleMessage()方法中又调用了handleServiceArgs()方法，其代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handleServiceArgs</span><span class="params">(ServiceArgsData data)</span> </span>&#123;</span><br><span class="line">    Service s = mServices.get(data.token);</span><br><span class="line">    <span class="keyword">if</span> (s != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (data.args != <span class="keyword">null</span>) &#123;</span><br><span class="line">                data.args.setExtrasClassLoader(s.getClassLoader());</span><br><span class="line">                data.args.prepareToEnterProcess();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> res;</span><br><span class="line">            <span class="keyword">if</span> (!data.taskRemoved) &#123;</span><br><span class="line">                res = s.onStartCommand(data.args, data.flags, data.startId);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                s.onTaskRemoved(data.args);</span><br><span class="line">                res = Service.START_TASK_REMOVED_COMPLETE;</span><br><span class="line">            &#125;</span><br><span class="line">            ...</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在handleServiceArgs()方法中先根据token来获取了Service，这个token是在handleServiceCreate()方法中调用完Service的onCreate()方法后将token和Service存到变量mServices中的。接着调用了Serevice中的onStartCommand()方法来将参数传递到了Service中，从而完成Service启动的生命周期。<br>现在分析完了startSerevice()这种方式启动Service，下面分析通过bindService()这种方式来绑定服务。<br>我们知道通过bindService()这种方式绑定服务调用的是ContextImpl中的bindService()方法，在bindService()方法中调用了bindServiceCommon()方法，接着又调用了AMS中的bindService()方法，在AMS的bindService()方法中又调用了ActiveService中的bindServiceLocked()方法，来看bindServiceLocked()方法的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bindServiceLocked</span><span class="params">(IApplicationThread caller, IBinder token,</span><br><span class="line">        Intent service, String resolvedType,</span><br><span class="line">        IServiceConnection connection, <span class="keyword">int</span> flags, <span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    ServiceLookupResult res =</span><br><span class="line">        retrieveServiceLocked(service, resolvedType,</span><br><span class="line">                Binder.getCallingPid(), Binder.getCallingUid(), userId, <span class="keyword">true</span>, callerFg);</span><br><span class="line">    <span class="keyword">if</span> (res == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (res.record == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ServiceRecord s = res.record;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">long</span> origId = Binder.clearCallingIdentity();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> ((flags&amp;Context.BIND_AUTO_CREATE) != <span class="number">0</span>) &#123;</span><br><span class="line">            s.lastActivity = SystemClock.uptimeMillis();</span><br><span class="line">            <span class="keyword">if</span> (bringUpServiceLocked(s, service.getFlags(), callerFg, <span class="keyword">false</span>) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> (s.app != <span class="keyword">null</span> &amp;&amp; b.intent.received) &#123;</span><br><span class="line">            <span class="comment">// Service is already running, so we can immediately</span></span><br><span class="line">            <span class="comment">// publish the connection.</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                c.conn.connected(s.name, b.intent.binder);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                Slog.w(TAG, <span class="string">"Failure sending service "</span> + s.shortName</span><br><span class="line">                        + <span class="string">" to connection "</span> + c.conn.asBinder()</span><br><span class="line">                        + <span class="string">" (in "</span> + c.binding.client.processName + <span class="string">")"</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// If this is the first app connected back to this binding,</span></span><br><span class="line">            <span class="comment">// and the service had previously asked to be told when</span></span><br><span class="line">            <span class="comment">// rebound, then do so.</span></span><br><span class="line">            <span class="keyword">if</span> (b.intent.apps.size() == <span class="number">1</span> &amp;&amp; b.intent.doRebind) &#123;</span><br><span class="line">                requestServiceBindingLocked(s, b.intent, callerFg, <span class="keyword">true</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!b.intent.requested) &#123;</span><br><span class="line">            requestServiceBindingLocked(s, b.intent, callerFg, <span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        getServiceMap(s.userId).ensureNotStartingBackground(s);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        Binder.restoreCallingIdentity(origId);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>首先通过retrieveServiceLocked()方法获取了一个ServiceLookupResult对象，ServiceLookupResult是一个用于保存ServiceRecord和其Permission的对象，接着从中获取record对象赋值给了ServiceRecord类型变量s，接着有个if判断，如果flag &amp; Context.BIND_AUTO_CREATE不等于0的话，则执行bringUpServiceLocked()方法。bringUpServiceLocked()方法在前面说过，在这个方法中调用了realStartServiceLocked()。在realStartServiceLocked()方法中首先通过scheduleCreateService()来创建了Service对象，然后调用requestServiceBindingLocked()方法来执行Service绑定。来看requestServiceBindingLocked()方法的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">requestServiceBindingLocked</span><span class="params">(ServiceRecord r,</span><br><span class="line">            IntentBindRecord i, <span class="keyword">boolean</span> execInFg, <span class="keyword">boolean</span> rebind)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (r.app == <span class="keyword">null</span> || r.app.thread == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// If service is not currently running, can't yet bind.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ((!i.requested || rebind) &amp;&amp; i.apps.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            bumpServiceExecutingLocked(r, execInFg, <span class="string">"bind"</span>);</span><br><span class="line">            r.app.forceProcessStateUpTo(ActivityManager.PROCESS_STATE_SERVICE);</span><br><span class="line">            r.app.thread.scheduleBindService(r, i.intent.getIntent(), rebind,</span><br><span class="line">                    r.app.repProcState);</span><br><span class="line">            <span class="keyword">if</span> (!rebind) &#123;</span><br><span class="line">                i.requested = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            i.hasBound = <span class="keyword">true</span>;</span><br><span class="line">            i.doRebind = <span class="keyword">false</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">            <span class="keyword">if</span> (DEBUG_SERVICE) Slog.v(TAG, <span class="string">"Crashed while binding "</span> + r);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里只是通过IApplicationThread中的scheduleBindService()方法从AMS进程回到了应用程序进程，即ActivityThread中，然后在scheduleBindService()方法中发送了一个类型为BIND_SERVICE的消息，然后在handleBindService()中来处理这个消息，来看handleBindService()方法的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handleBindService</span><span class="params">(BindServiceData data)</span> </span>&#123;</span><br><span class="line">    Service s = mServices.get(data.token);</span><br><span class="line">    <span class="keyword">if</span> (DEBUG_SERVICE)</span><br><span class="line">        Slog.v(TAG, <span class="string">"handleBindService s="</span> + s + <span class="string">" rebind="</span> + data.rebind);</span><br><span class="line">    <span class="keyword">if</span> (s != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            data.intent.setExtrasClassLoader(s.getClassLoader());</span><br><span class="line">            data.intent.prepareToEnterProcess();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!data.rebind) &#123;</span><br><span class="line">                    IBinder binder = s.onBind(data.intent);</span><br><span class="line">                    ActivityManagerNative.getDefault().publishService(</span><br><span class="line">                            data.token, data.intent, binder);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    s.onRebind(data.intent);</span><br><span class="line">                    ActivityManagerNative.getDefault().serviceDoneExecuting(</span><br><span class="line">                            data.token, SERVICE_DONE_EXECUTING_ANON, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                ensureJitEnabled();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (RemoteException ex) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!mInstrumentation.onException(s, e)) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                        <span class="string">"Unable to bind to service "</span> + s</span><br><span class="line">                        + <span class="string">" with "</span> + data.intent + <span class="string">": "</span> + e.toString(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>首先根据token来获取Service对象，然后调用Service的onBind()方法，接着又调用了AMS中的publishService()方法，在publishService()方法中又调用了ActiveService中的publishServiceLocked()方法，来看publishServiceLocked()的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">publishServiceLocked</span><span class="params">(ServiceRecord r, Intent intent, IBinder service)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">long</span> origId = Binder.clearCallingIdentity();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (DEBUG_SERVICE) Slog.v(TAG, <span class="string">"PUBLISHING "</span> + r</span><br><span class="line">                + <span class="string">" "</span> + intent + <span class="string">": "</span> + service);</span><br><span class="line">        <span class="keyword">if</span> (r != <span class="keyword">null</span>) &#123;</span><br><span class="line">            Intent.FilterComparison filter</span><br><span class="line">                    = <span class="keyword">new</span> Intent.FilterComparison(intent);</span><br><span class="line">            IntentBindRecord b = r.bindings.get(filter);</span><br><span class="line">            <span class="keyword">if</span> (b != <span class="keyword">null</span> &amp;&amp; !b.received) &#123;</span><br><span class="line">                b.binder = service;</span><br><span class="line">                b.requested = <span class="keyword">true</span>;</span><br><span class="line">                b.received = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> conni=r.connections.size()-<span class="number">1</span>; conni&gt;=<span class="number">0</span>; conni--) &#123;</span><br><span class="line">                    ArrayList&lt;ConnectionRecord&gt; clist = r.connections.valueAt(conni);</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;clist.size(); i++) &#123;</span><br><span class="line">                        ConnectionRecord c = clist.get(i);</span><br><span class="line">                        ...</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            c.conn.connected(r.name, service);</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                            Slog.w(TAG, <span class="string">"Failure sending service "</span> + r.name +</span><br><span class="line">                                  <span class="string">" to connection "</span> + c.conn.asBinder() +</span><br><span class="line">                                  <span class="string">" (in "</span> + c.binding.client.processName + <span class="string">")"</span>, e);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            serviceDoneExecutingLocked(r, mDestroyingServices.contains(r), <span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        Binder.restoreCallingIdentity(origId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在这里其实只是调用了IServiceConnection中的onConnected()方法，IServiceConnection是一个AIDL接口，其实现是在LoadedApk中。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">InnerConnection</span> <span class="keyword">extends</span> <span class="title">IServiceConnection</span>.<span class="title">Stub</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> WeakReference&lt;LoadedApk.ServiceDispatcher&gt; mDispatcher;</span><br><span class="line">    InnerConnection(LoadedApk.ServiceDispatcher sd) &#123;</span><br><span class="line">        mDispatcher = <span class="keyword">new</span> WeakReference&lt;LoadedApk.ServiceDispatcher&gt;(sd);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connected</span><span class="params">(ComponentName name, IBinder service)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">        LoadedApk.ServiceDispatcher sd = mDispatcher.get();</span><br><span class="line">        <span class="keyword">if</span> (sd != <span class="keyword">null</span>) &#123;</span><br><span class="line">            sd.connected(name, service);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里又调用了ServiceDispatcher中的connected()方法，在ServiceDispatcher的connected()方法中，又调用了doConnected()方法，来看doConnected()方法的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doConnected</span><span class="params">(ComponentName name, IBinder service)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// If there is a new service, it is now connected.</span></span><br><span class="line">    <span class="keyword">if</span> (service != <span class="keyword">null</span>) &#123;</span><br><span class="line">        mConnection.onServiceConnected(name, service);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里就调用了ServiceConnection接口中的onServiceConnected()方法来完成了Service的绑定过程。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/06/23/广播注册接收流程分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">广播注册接收流程分析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Service启动流程分析" data-title="Service启动流程分析" data-url="http://fengyinlove.com/2016/06/28/Service启动流程分析/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 fengyin
+    	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
