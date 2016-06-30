@@ -165,11 +165,11 @@
 
       <div class="body-wrap">
   
-    <article id="post-SystemServer的创建过程" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-SystemServer中的WatchDog" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/20/SystemServer的创建过程/" class="article-date">
-  	<time datetime="2016-01-20T12:34:28.000Z" itemprop="datePublished">2016-01-20</time>
+      <a href="/2016/01/27/SystemServer中的WatchDog/" class="article-date">
+  	<time datetime="2016-01-27T11:58:58.000Z" itemprop="datePublished">2016-01-27</time>
 </a>
     </div>
   
@@ -182,7 +182,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/20/SystemServer的创建过程/">SystemServer的创建过程</a>
+      <a class="article-title" href="/2016/01/27/SystemServer中的WatchDog/">SystemServer中的WatchDog</a>
     </h1>
   
 
@@ -191,7 +191,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong><em>SystemServer</em></strong>的创建过程可以分成两个部分，一部分是在<strong><em>Zygote</em></strong>进程中<strong><em>fork</em></strong>并初始化<strong><em>SystemServer</em></strong>进程，另一部分是执行<strong><em>SystemServer</em></strong>类的<strong><em>main</em></strong>方法来启动系统服务。<strong><em>init.rc</em></strong>文件中定义的<strong><em>Zygote</em></strong>进程的启动参数包括了<code>—start-system-server</code>,因此，在ZygoteInit类的main方法里会调用<code>startSystemServer()</code>方法来启动SystemServer。startSystemServer()方法的代码如下：<br>
+        <p>在<strong><em>SystemServer</em></strong>中创建<strong><em>WatchDog</em></strong>对象的代码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">final</span> Watchdog watchdog = Watchdog.getInstance();</span><br><span class="line">watchdog.init(context, mActivityManagerService);</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>Watchdog</em></strong>是单实例的运行模式。第一次调用<code>getInstance()</code>会生成<strong><em>Watchdog</em></strong>的对象并保存到全局变量<strong><em>sWatchdog</em></strong>，再次调用时返回的保存的值。<strong><em>WatchDog</em></strong>的构造方法如下：<br>
       
     </div>
     
@@ -206,7 +207,7 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/01/20/SystemServer的创建过程/#more">Read more >></a>
+          <a  href="/2016/01/27/SystemServer中的WatchDog/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -225,11 +226,11 @@
 
 
   
-    <article id="post-Android的Init进程-三" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Zygote进程-二" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/20/Android的Init进程-三/" class="article-date">
-  	<time datetime="2016-01-20T02:20:43.000Z" itemprop="datePublished">2016-01-20</time>
+      <a href="/2016/01/26/Zygote进程-二/" class="article-date">
+  	<time datetime="2016-01-26T12:04:24.000Z" itemprop="datePublished">2016-01-26</time>
 </a>
     </div>
   
@@ -242,7 +243,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/20/Android的Init进程-三/">Android的Init进程(三)</a>
+      <a class="article-title" href="/2016/01/26/Zygote进程-二/">Zygote进程(二)</a>
     </h1>
   
 
@@ -251,7 +252,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在<strong><em>main()</em></strong>函数的for循环中，会调用<strong><em>restart_processes()</em></strong>函数来启动服务列表中的服务进程。函数restart_processes()的代码如下所示：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">restart_processes</span><span class="params">()</span></span>&#123;</span><br><span class="line">    process_needs_restart = <span class="number">0</span>;</span><br><span class="line">    service_for_each_flags(SVC_RESTARTING,</span><br><span class="line">                           restart_service_if_needed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p><strong><em>ZygoteInit</em></strong>类负责<strong><em>Zygote</em></strong>进程Java层的初始化工作，入口方法<code>main()</code>去掉一些<strong><em>log</em></strong>后，具体的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        SamplingProfilerIntegration.start();</span><br><span class="line">        <span class="keyword">boolean</span> startSystemServer = <span class="keyword">false</span>;</span><br><span class="line">        String socketName = <span class="string">"zygote"</span>;</span><br><span class="line">        String abiList = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; argv.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">"start-system-server"</span>.equals(argv[i])) &#123;</span><br><span class="line">                startSystemServer = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (argv[i].startsWith(ABI_LIST_ARG)) &#123;</span><br><span class="line">                abiList = argv[i].substring(ABI_LIST_ARG.length());</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (argv[i].startsWith(SOCKET_NAME_ARG)) &#123;</span><br><span class="line">                socketName = argv[i].substring(SOCKET_NAME_ARG.length());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unknown command line argument: "</span> + argv[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (abiList == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"No ABI list supplied."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        registerZygoteSocket(socketName);</span><br><span class="line">        EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,</span><br><span class="line">            SystemClock.uptimeMillis());</span><br><span class="line">        preload();</span><br><span class="line">        EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,</span><br><span class="line">            SystemClock.uptimeMillis());</span><br><span class="line">        gc();</span><br><span class="line">        Trace.setTracingEnabled(<span class="keyword">false</span>);</span><br><span class="line">        <span class="keyword">if</span> (startSystemServer) &#123;</span><br><span class="line">            startSystemServer(abiList, socketName);</span><br><span class="line">        &#125;</span><br><span class="line">        runSelectLoop(abiList);</span><br><span class="line">        closeServerSocket();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (MethodAndArgsCaller caller) &#123;</span><br><span class="line">        caller.run();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException ex) &#123;</span><br><span class="line">       closeServerSocket();</span><br><span class="line">       <span class="keyword">throw</span> ex;</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
       
     </div>
     
@@ -266,7 +267,7 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/01/20/Android的Init进程-三/#more">Read more >></a>
+          <a  href="/2016/01/26/Zygote进程-二/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -285,11 +286,11 @@
 
 
   
-    <article id="post-Android的Init进程-二" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Zygote进程-一" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/19/Android的Init进程-二/" class="article-date">
-  	<time datetime="2016-01-19T10:51:37.000Z" itemprop="datePublished">2016-01-19</time>
+      <a href="/2016/01/26/Zygote进程-一/" class="article-date">
+  	<time datetime="2016-01-26T11:13:28.000Z" itemprop="datePublished">2016-01-26</time>
 </a>
     </div>
   
@@ -302,7 +303,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/19/Android的Init进程-二/">Android的Init进程(二)</a>
+      <a class="article-title" href="/2016/01/26/Zygote进程-一/">Zygote进程(一)</a>
     </h1>
   
 
@@ -311,7 +312,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Init进程的源码位于目录<strong><em>system/core/init</em></strong>下。<strong><em>程序的入口函数main()</em></strong>位于文件init.c中。main()函数比较长，整个Init进程的启动流程都在这个函数中。下面我们把main()函数分成小段，一段段地介绍其功能和作用。<br>进入main()函数后，首先检查启动程序的文件名。如果文件名是<strong><em>uevent</em></strong>，执行守护进程的uevent的主函数<strong><em>uevent_main()</em></strong>，如果文件名是<strong><em>watchdogd</em></strong>，执行看门狗守护进程的主函数<strong><em>watchdogd_main()</em></strong>。若都不是则继续执行。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(basename(argv[<span class="number">0</span>]), <span class="string">"ueventd"</span>))</span><br><span class="line">        <span class="keyword">return</span> ueventd_main(argc, argv);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(basename(argv[<span class="number">0</span>]), <span class="string">"watchdogd"</span>))</span><br><span class="line">        <span class="keyword">return</span> watchdogd_main(argc, argv);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* clear the umask */</span></span><br><span class="line">    umask(<span class="number">0</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p><strong><em>Zygote</em></strong>进程是Android中非常重要的一个进程，它和<strong><em>Init进程、SystemServer进程</em></strong>是支撑Android世界的三极。Linux进程使用系统调用<strong><em>fork</em></strong>产生的，<strong><em>fork</em></strong>出的子进程除了内核中的一些核心数据结构和父进程不相同外，其余的内存映像都是和父进程相同的。只有当子进程需要去修改写这些共享内存时，操作系统才会为子进程分配一个新的页面，并将老的页面上的数据复制到一份新的页面，这就是所谓的<strong><em>写时拷贝</em></strong>。<br>通常子进程被<strong><em>fork</em></strong>出来后，会继续执行系统调用<strong><em>exec</em></strong>，<strong><em>exec</em></strong>将用一个新的可执行文件内容替换当前进程的代码段，数据段，堆和栈段。<strong><em>Fork</em></strong>加<strong><em>exec</em></strong>是Linux启动应用的标准做法，<strong><em>Init</em></strong>进程也是这样来启动其他服务的。<br>
       
     </div>
     
@@ -326,7 +327,7 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/01/19/Android的Init进程-二/#more">Read more >></a>
+          <a  href="/2016/01/26/Zygote进程-一/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -345,11 +346,11 @@
 
 
   
-    <article id="post-Android的Init进程-一" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-ServiceManager的作用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/19/Android的Init进程-一/" class="article-date">
-  	<time datetime="2016-01-19T10:22:32.000Z" itemprop="datePublished">2016-01-19</time>
+      <a href="/2016/01/25/ServiceManager的作用/" class="article-date">
+  	<time datetime="2016-01-25T11:24:33.000Z" itemprop="datePublished">2016-01-25</time>
 </a>
     </div>
   
@@ -362,7 +363,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/19/Android的Init进程-一/">Android的Init进程(一)</a>
+      <a class="article-title" href="/2016/01/25/ServiceManager的作用/">ServiceManager的作用</a>
     </h1>
   
 
@@ -371,7 +372,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Init进程是Linux内核启动后创建的第一个用户进程，地位非常重要。Init进程在初始化过程中会启动很多重要的守护进程，因此，了解Init进程的启动过程将有助于我们更好的理解Android系统。Init进程除了完成系统的初始化之外，本身也是一个守护进程，担负着系统部分很重要的职责。<br>Android的启动过程可分为bootloader引导、装载和启动Linux内核、启动Android系统3个大的阶段。其中Android系统启动还可以细分为启动<strong><em>Init进程、启动Zygote进程、启动SystemService、启动SystemServer、启动Home</em></strong>等多个阶段。<br>下面简单介绍设备的启动过程。<br>
+        <p><strong><em>ServiceManager</em></strong>是<strong><em>Binder</em></strong>架构中用来解析<strong><em>Binder</em></strong>名称的模块。<strong><em>ServiceManager</em></strong>本身就是一个<strong><em>Binder</em></strong>服务。但是，<strong><em>ServiceManager</em></strong>并没有使用<strong><em>libbinder</em></strong>来构建<strong><em>binder</em></strong>服务，而是自己实现了一个简单的框架来直接和驱动通信。<strong><em>ServiceManager</em></strong>的源码位于目录<strong><em>framework/native/cmds/servicemanager</em></strong>下，主要由两个文件组成，一个是<strong><em>binder.c</em></strong>，用来实现简单的Binder通信功能，另一个文件是<strong><em>service_manager.c</em></strong>，用来实现<strong><em>ServiceManager</em></strong>的上层逻辑。<br>下面从ServiceManager的<code>main()</code>函数来开始分析，代码如下：<br>
       
     </div>
     
@@ -386,7 +387,67 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/01/19/Android的Init进程-一/#more">Read more >></a>
+          <a  href="/2016/01/25/ServiceManager的作用/#more">Read more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-vpn-和-shadowsocks-的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/21/vpn-和-shadowsocks-的区别/" class="article-date">
+  	<time datetime="2016-01-21T01:46:59.000Z" itemprop="datePublished">2016-01-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/21/vpn-和-shadowsocks-的区别/">vpn 和 shadowsocks 的区别</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Shadowsocks 属于<strong><em>socks5</em></strong>代理，只能对<strong><em>支持socks5代理的程序</em></strong>进行加密代理作用，但对路由器没有要求。<br>Shadowsocks 是开源软件有丰富的客户端支持。<br>shadowsocks 优点：有丰富的客户端 简单易用，连接方便，可以自定义编辑pac文件自定义走代理的线路,特别适用于浏览器科学上网使用<br>shadowsocks 缺点：客户端有windows，macos，android设备，在未越狱的 iphone/ipad 上不能全局代理<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络/">网络</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/21/vpn-和-shadowsocks-的区别/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -407,7 +468,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>
@@ -443,6 +504,7 @@
 
 
 
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259762545'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1259762545%26show%3Dpic2' type='text/javascript'%3E%3C/script%3E"));</script>
 
 
 
