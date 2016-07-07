@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
+						<a href="/tags/Android技巧/" style="font-size: 10px;">Android技巧</a> <a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
 					</div>
 				</section>
 				
@@ -164,6 +164,67 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-Hook-Ams和Pms" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/07/Hook-Ams和Pms/" class="article-date">
+  	<time datetime="2016-07-07T06:20:37.000Z" itemprop="datePublished">2016-07-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/07/Hook-Ams和Pms/">Hook--Ams和Pms</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们知道AMS和PMS在framework中是极为重要的，Android的四大组件无时不在与AMS和PMS打交道，从最简单的startActivity()、startService()、registerReceiver()、getContentProvider()等都是通过AMS来完成，而PMS则完成了权限检查，获取组件信息等重要方法。</p>
+<p>##Hook AMS##<br>要Hook AMS和PMS首先要弄明白一点，AMS和PMS从哪来获取。从前面Activity启动流程里我们知道了Activity启动时，在Instrumentation中通过调用ActivityManagerNative来从应用程序进程转移到了AMS进程，那么这个ActivityManagerNative到底是个什么东西呢？<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android技巧/">Android技巧</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/07/Hook-Ams和Pms/#more">Read more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-ContentProvider实现原理分析" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -405,70 +466,9 @@
 
 
   
-    <article id="post-Activity启动流程分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/17/Activity启动流程分析/" class="article-date">
-  	<time datetime="2016-06-17T06:48:07.000Z" itemprop="datePublished">2016-06-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/17/Activity启动流程分析/">Activity启动流程分析(一)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Activity的启动是通过Activity或者Context的startActivity()方法执行的，它们都是调用了ContextImpl类中的startActivity来启动Activity的，ContextImpl类的startActivity()方法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent, Bundle options)</span> </span>&#123;</span><br><span class="line">    warnIfCallingFromSystemProcess();</span><br><span class="line">    <span class="keyword">if</span> ((intent.getFlags()&amp;Intent.FLAG_ACTIVITY_NEW_TASK) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> AndroidRuntimeException(</span><br><span class="line">                <span class="string">"Calling startActivity() from outside of an Activity "</span></span><br><span class="line">                + <span class="string">" context requires the FLAG_ACTIVITY_NEW_TASK flag."</span></span><br><span class="line">                + <span class="string">" Is this really what you want?"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    mMainThread.getInstrumentation().execStartActivity(</span><br><span class="line">        getOuterContext(), mMainThread.getApplicationThread(), <span class="keyword">null</span>,</span><br><span class="line">        (Activity)<span class="keyword">null</span>, intent, -<span class="number">1</span>, options);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在startActivity()方法中，调用了成员变量mMainThread的getInstrumentation()方法来获取到Instrumentation，进而调用execStartActivity()方法来启动Activity。其中mMainThread是每个应用进程的ActivityThread，每个应用进程都有一个ActivityThread，Instrumentation是用来监视Activity与系统交互的。<br>接下来看execStartActivity()方法，代码如下：<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/17/Activity启动流程分析/#more">Read more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </div>
