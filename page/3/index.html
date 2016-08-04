@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android技巧/" style="font-size: 10px;">Android技巧</a> <a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
+						<a href="/tags/Android技巧/" style="font-size: 15px;">Android技巧</a> <a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
 					</div>
 				</section>
 				
@@ -164,6 +164,66 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-Zygote进程-一" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/26/Zygote进程-一/" class="article-date">
+  	<time datetime="2016-01-26T11:13:28.000Z" itemprop="datePublished">2016-01-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/26/Zygote进程-一/">Zygote进程(一)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong><em>Zygote</em></strong>进程是Android中非常重要的一个进程，它和<strong><em>Init进程、SystemServer进程</em></strong>是支撑Android世界的三极。Linux进程使用系统调用<strong><em>fork</em></strong>产生的，<strong><em>fork</em></strong>出的子进程除了内核中的一些核心数据结构和父进程不相同外，其余的内存映像都是和父进程相同的。只有当子进程需要去修改写这些共享内存时，操作系统才会为子进程分配一个新的页面，并将老的页面上的数据复制到一份新的页面，这就是所谓的<strong><em>写时拷贝</em></strong>。<br>通常子进程被<strong><em>fork</em></strong>出来后，会继续执行系统调用<strong><em>exec</em></strong>，<strong><em>exec</em></strong>将用一个新的可执行文件内容替换当前进程的代码段，数据段，堆和栈段。<strong><em>Fork</em></strong>加<strong><em>exec</em></strong>是Linux启动应用的标准做法，<strong><em>Init</em></strong>进程也是这样来启动其他服务的。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/26/Zygote进程-一/#more">Read more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-ServiceManager的作用" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -387,66 +447,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/01/20/Android的Init进程-三/#more">Read more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android的Init进程-二" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/19/Android的Init进程-二/" class="article-date">
-  	<time datetime="2016-01-19T10:51:37.000Z" itemprop="datePublished">2016-01-19</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/19/Android的Init进程-二/">Android的Init进程(二)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Init进程的源码位于目录<strong><em>system/core/init</em></strong>下。<strong><em>程序的入口函数main()</em></strong>位于文件init.c中。main()函数比较长，整个Init进程的启动流程都在这个函数中。下面我们把main()函数分成小段，一段段地介绍其功能和作用。<br>进入main()函数后，首先检查启动程序的文件名。如果文件名是<strong><em>uevent</em></strong>，执行守护进程的uevent的主函数<strong><em>uevent_main()</em></strong>，如果文件名是<strong><em>watchdogd</em></strong>，执行看门狗守护进程的主函数<strong><em>watchdogd_main()</em></strong>。若都不是则继续执行。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(basename(argv[<span class="number">0</span>]), <span class="string">"ueventd"</span>))</span><br><span class="line">        <span class="keyword">return</span> ueventd_main(argc, argv);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(basename(argv[<span class="number">0</span>]), <span class="string">"watchdogd"</span>))</span><br><span class="line">        <span class="keyword">return</span> watchdogd_main(argc, argv);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* clear the umask */</span></span><br><span class="line">    umask(<span class="number">0</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/19/Android的Init进程-二/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>

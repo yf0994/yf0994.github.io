@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android技巧/" style="font-size: 10px;">Android技巧</a> <a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
+						<a href="/tags/Android技巧/" style="font-size: 15px;">Android技巧</a> <a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
 					</div>
 				</section>
 				
@@ -164,6 +164,66 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-Activity的启动流程分析（二）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/21/Activity的启动流程分析（二）/" class="article-date">
+  	<time datetime="2016-06-21T09:00:17.000Z" itemprop="datePublished">2016-06-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/21/Activity的启动流程分析（二）/">Activity的启动流程分析（二）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前文分析了启动Activity流程的前半部分，简单来说就是首先检查了启动Activity的参数和权限，然后为启动的Activity的准备Stack和Task，最后暂停了当前Activity。接着来分析Activity启动。<br>回到resumeTopActivityInnerLocked()方法中，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">resumeTopActivityInnerLocked</span><span class="params">(ActivityRecord prev, Bundle options)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (mResumedActivity != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (DEBUG_STATES) Slog.d(TAG, <span class="string">"resumeTopActivityLocked: Pausing "</span> + mResumedActivity);</span><br><span class="line">        pausing |= startPausingLocked(userLeaving, <span class="keyword">false</span>, <span class="keyword">true</span>, dontWaitForPause);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (next.app != <span class="keyword">null</span> &amp;&amp; next.app.thread != <span class="keyword">null</span>) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Whoops, need to restart this activity!</span></span><br><span class="line">        <span class="keyword">if</span> (!next.hasBeenLaunched) &#123;</span><br><span class="line">            next.hasBeenLaunched = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (SHOW_APP_STARTING_PREVIEW) &#123;</span><br><span class="line">                mWindowManager.setAppStartingWindow(</span><br><span class="line">                        next.appToken, next.packageName, next.theme,</span><br><span class="line">                        mService.compatibilityInfoForPackageLocked(</span><br><span class="line">                                next.info.applicationInfo),</span><br><span class="line">                        next.nonLocalizedLabel,</span><br><span class="line">                        next.labelRes, next.icon, next.logo, next.windowFlags,</span><br><span class="line">                        <span class="keyword">null</span>, <span class="keyword">true</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (DEBUG_SWITCH) Slog.v(TAG, <span class="string">"Restarting: "</span> + next);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (DEBUG_STATES) Slog.d(TAG, <span class="string">"resumeTopActivityLocked: Restarting "</span> + next);</span><br><span class="line">        mStackSupervisor.startSpecificActivityLocked(next, <span class="keyword">true</span>, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android系统/">android系统</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/21/Activity的启动流程分析（二）/#more">Read more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Activity启动流程分析" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -389,66 +449,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/01/26/Zygote进程-二/#more">Read more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Zygote进程-一" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/26/Zygote进程-一/" class="article-date">
-  	<time datetime="2016-01-26T11:13:28.000Z" itemprop="datePublished">2016-01-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/26/Zygote进程-一/">Zygote进程(一)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong><em>Zygote</em></strong>进程是Android中非常重要的一个进程，它和<strong><em>Init进程、SystemServer进程</em></strong>是支撑Android世界的三极。Linux进程使用系统调用<strong><em>fork</em></strong>产生的，<strong><em>fork</em></strong>出的子进程除了内核中的一些核心数据结构和父进程不相同外，其余的内存映像都是和父进程相同的。只有当子进程需要去修改写这些共享内存时，操作系统才会为子进程分配一个新的页面，并将老的页面上的数据复制到一份新的页面，这就是所谓的<strong><em>写时拷贝</em></strong>。<br>通常子进程被<strong><em>fork</em></strong>出来后，会继续执行系统调用<strong><em>exec</em></strong>，<strong><em>exec</em></strong>将用一个新的可执行文件内容替换当前进程的代码段，数据段，堆和栈段。<strong><em>Fork</em></strong>加<strong><em>exec</em></strong>是Linux启动应用的标准做法，<strong><em>Init</em></strong>进程也是这样来启动其他服务的。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android系统/">Android系统</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/26/Zygote进程-一/#more">Read more >></a>
         </p>
       
       <div class="clearfix"></div>

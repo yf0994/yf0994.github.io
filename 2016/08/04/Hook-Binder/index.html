@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Hook_Binder | Feng yin Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android通过Binder机制给应用程序提供了一系列的系统服务，比如ActivityManager，PackageManager，ClipboardManager等等，接下来就Hook这些Binder服务。要Hook这些服务首先需要了解Binder机制。我们都知道在获取XXXManager的时候都是通过Context的getSystemService方法，比如使用WindowManager：1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hook_Binder">
+<meta property="og:url" content="http://fengyinlove.com/2016/08/04/Hook-Binder/index.html">
+<meta property="og:site_name" content="Feng yin Blog">
+<meta property="og:description" content="Android通过Binder机制给应用程序提供了一系列的系统服务，比如ActivityManager，PackageManager，ClipboardManager等等，接下来就Hook这些Binder服务。要Hook这些服务首先需要了解Binder机制。我们都知道在获取XXXManager的时候都是通过Context的getSystemService方法，比如使用WindowManager：1">
+<meta property="og:updated_time" content="2016-08-04T03:42:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hook_Binder">
+<meta name="twitter:description" content="Android通过Binder机制给应用程序提供了一系列的系统服务，比如ActivityManager，PackageManager，ClipboardManager等等，接下来就Hook这些Binder服务。要Hook这些服务首先需要了解Binder机制。我们都知道在获取XXXManager的时候都是通过Context的getSystemService方法，比如使用WindowManager：1">
+  
+    <link rel="alternative" href="/atom.xml" title="Feng yin Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/bitbug_favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/favicon.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">fengyin</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/yf0994/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android技巧/" style="font-size: 15px;">Android技巧</a> <a href="/tags/Android系统/" style="font-size: 20px;">Android系统</a> <a href="/tags/android系统/" style="font-size: 10px;">android系统</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">Read the fucking code!</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">fengyin</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/favicon.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">fengyin</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yf0994/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Hook-Binder" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/04/Hook-Binder/" class="article-date">
+  	<time datetime="2016-08-04T02:02:05.000Z" itemprop="datePublished">2016-08-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Hook_Binder
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android技巧/">Android技巧</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android通过Binder机制给应用程序提供了一系列的系统服务，比如ActivityManager，PackageManager，ClipboardManager等等，接下来就Hook这些Binder服务。要Hook这些服务首先需要了解Binder机制。我们都知道在获取XXXManager的时候都是通过Context的getSystemService方法，比如使用WindowManager：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WindowManager manager = (WindowManager)context.getSystemServie(Context.WINDOW);</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>我们来看getSystemService方法，它的实现是在ContextImpl中，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getSystemService</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    ServiceFetcher fetcher = SYSTEM_SERVICE_MAP.get(name);</span><br><span class="line">    <span class="keyword">return</span> fetcher == <span class="keyword">null</span> ? <span class="keyword">null</span> : fetcher.getService(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从代码中可以看出所有的service都是保存在SYSTEM_SERVICE_MAP这个map中的，来看这个map是怎么初始化的，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">registerService</span><span class="params">(String serviceName, ServiceFetcher fetcher)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!(fetcher <span class="keyword">instanceof</span> StaticServiceFetcher)) &#123;</span><br><span class="line">        fetcher.mContextCacheIndex = sNextPerContextServiceCacheIndex++;</span><br><span class="line">    &#125;</span><br><span class="line">    SYSTEM_SERVICE_MAP.put(serviceName, fetcher);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>所有的service都是通过调用这个方法将自己写入到这个map中的。然后在ContextImpl的静态代码块中调用了registerService方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    registerService(ACCOUNT_SERVICE, <span class="keyword">new</span> ServiceFetcher() &#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">createService</span><span class="params">(ContextImpl ctx)</span> </span>&#123;</span><br><span class="line">			IBinder b = ServiceManager.getService(ACCOUNT_SERVICE);</span><br><span class="line">            IAccountManager service = IAccountManager.Stub.asInterface(b);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AccountManager(ctx, service);</span><br><span class="line">        &#125;&#125;);</span><br><span class="line"></span><br><span class="line">    registerService(ACTIVITY_SERVICE, <span class="keyword">new</span> ServiceFetcher() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Object <span class="title">createService</span><span class="params">(ContextImpl ctx)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ActivityManager(ctx.getOuterContext(), ctx.mMainThread.getHandler());</span><br><span class="line">        &#125;&#125;);</span><br><span class="line"></span><br><span class="line">    registerService(ALARM_SERVICE, <span class="keyword">new</span> ServiceFetcher() &#123;</span><br><span class="line">         <span class="function"><span class="keyword">public</span> Object <span class="title">createService</span><span class="params">(ContextImpl ctx)</span> </span>&#123;</span><br><span class="line">            IBinder b = ServiceManager.getService(ALARM_SERVICE);</span><br><span class="line">            IAlarmManager service = IAlarmManager.Stub.asInterface(b);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AlarmManager(service, ctx);</span><br><span class="line">        &#125;&#125;);</span><br><span class="line"></span><br><span class="line">    registerService(AUDIO_SERVICE, <span class="keyword">new</span> ServiceFetcher() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Object <span class="title">createService</span><span class="params">(ContextImpl ctx)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AudioManager(ctx);</span><br><span class="line">        &#125;&#125;);</span><br><span class="line"></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></p>
+<p>在静态代码块中有的是通过ServiceManager来获取的IBinder对象，然后通过Stub.asInterface转化成了Binder的接口对象，比如AccountManager，AlarmManager等，有的则直接是new出来的Manager，如ActivityManager，AudioManager，拿ActivityManager来说，在ActivityManager类中所有的核心操作都是使用ActivityManagerNative.getDefault()来完成的，这个在前面分析Activity启动的时候说过，它是一个用Singleton封装的单例对象，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton&lt;IActivityManager&gt; gDefault = <span class="keyword">new</span> Singleton&lt;IActivityManager&gt;() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> IActivityManager <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        IBinder b = ServiceManager.getService(<span class="string">"activity"</span>);</span><br><span class="line">        IActivityManager am = asInterface(b);</span><br><span class="line">        <span class="keyword">return</span> am;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>从这里可以看出来它也是通过ServiceManager来获取的IBinder对象，然后再转换成的Binder接口对象，同样的AudioManager也是类似的原理。这里还有一个问题就是ServiceManger是什么？其实所有远程的Service都是以Binder形式存在的，这些Binder都有一个管理者那就是ServiceManager。它是在System_server进程启动时候启动各种远程Binder服务时生成的，是一个单例，每当有一个新的Binder服务开启时，system_server进程就将启动的服务注册到ServiceManager中，这里。相关代码在SystemServer.java文件中，这里就不给出代码了。<br>所以总结来说获取系统的XXXManager就两步：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IBinder b = ServiceManager.getService(<span class="string">"service_name"</span>);</span><br><span class="line">IXXManager service = IXXManager.Stub.asInterface(b);</span><br></pre></td></tr></table></figure></p>
+<p>其中IXXManager是IInterface类型的接口。<br>好了现在知道了怎么获取的XXXManager后，该开始Hook了，Hook其中最重要的一步就是寻找Hook点。从上面的分析可以知道，所有的IXXManager对象都是通过调用asInterface来获取的，所以我们可以Hook掉这个方法，将这个方法的返回值修改成我们Hook后的Manager就可以了。<br>接下来看asInterface方法，这里我们以AppOpsManager为例，其asInterface的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IAppOpsService <span class="title">asInterface</span><span class="params">(IBinder obj)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    IInterface iin = obj.queryLocalInterface(DESCRIPTOR);</span><br><span class="line">    <span class="keyword">if</span> (iin != <span class="keyword">null</span> &amp;&amp; iin <span class="keyword">instanceof</span> IAppOpsService) &#123;</span><br><span class="line">        <span class="keyword">return</span> (IAppOpsService) iin;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> IAppOpsService.Stub.Proxy(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码的主要意思是先看本进程中是否存在这个Binder对象，如果存在则直接使用，如果不存在则创建一个代理对象，让这个代理对象完成跨进程的调用。在这个方法中我们从进行操作的也就只有queryLocalInterface这个点，所以我们尝试修改queryLocalInterface的返回值，并且让它符合if判断就可以了。<br>通过上文可以知道，获取IBinder对象的过程如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IBinder b = ServiceManager.getSerivce(<span class="string">"service_name"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>因此，我们可以修改getService的返回值，让这个返回是我们伪造过的IBinder对象，然后我们在这个伪造的IBinder对象中处理queryLocalInterface方法，从而返回我们伪造的对象达到Hook XXXManager的目的。在我们的app进程XXXManager都是XXXService的代理对象，而这些Service的本体对象一般都是存在某个进程中的，所以我们从这些Binder的代理对象来下手。<br>先看ServiceManager中的getService方法，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IBinder <span class="title">getService</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        IBinder service = sCache.get(name);</span><br><span class="line">        <span class="keyword">if</span> (service != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> service;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> getIServiceManager().getService(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">        Log.e(TAG, <span class="string">"error in getService"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从代码中我们可以看到这里是从sCache中根据name来获取的IBinder对象，所以我们可以通过替换sCache里的对象来返回我们自己的IBinder对象，然后在返回的IBinder对象中修改queryLocalInterface方法来替换成我们自己的XXXManager。<br>这里我们还是以Hook AppOpsManager为例。首先我们通过动态代理的方式创建Hook之后的AppOpsManager，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinderHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span></span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Origin binder object.</span></span><br><span class="line">    <span class="keyword">private</span> Object mBase;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BinderHandler</span><span class="params">(IBinder base, Class&lt;?&gt; stubCLass)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Method asInterfaceMethod = stubCLass.getDeclaredMethod(<span class="string">"asInterface"</span>, IBinder.class);</span><br><span class="line">            mBase = asInterfaceMethod.invoke(<span class="keyword">null</span>, base);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        Log.i(<span class="string">"DEBUG"</span>, method.getName());</span><br><span class="line">        <span class="keyword">return</span> method.invoke(mBase, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我们拿到原始的IBinder对象之后，如果需要使用hook之前的系统服务，并不能直接使用这个IBinder对象，而是需要调用asInterface方法将它转成IAppOpsService接口，因为getService获取到的IBinder对象其实是一个没有任何能力的Binder代理对象，它只负责与驱动打交道，而asInterface方法返回的IAppOpsService.Stub.Proxy类的对象可以实现具体的操作。<br>接下来我们应该想办法让asInterface方法返回我们上一步中创建的伪造对象，我们先伪造一个IBinder对象，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinderProxyHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String METHOD_QUERYLOCALINTERFACE = <span class="string">"queryLocalInterface"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> IBinder mBase;</span><br><span class="line">    <span class="keyword">private</span> Class&lt;?&gt; mStub;</span><br><span class="line">    <span class="keyword">private</span> Class&lt;?&gt; mIInterface;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BinderProxyHandler</span><span class="params">(IBinder base)</span></span>&#123;</span><br><span class="line">        mBase = base;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            mStub = Class.forName(<span class="string">"com.android.internal.app.IAppOpsService$Stub"</span>);</span><br><span class="line">            mIInterface = Class.forName(<span class="string">"com.android.internal.app.IAppOpsService"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(METHOD_QUERYLOCALINTERFACE.equals(method.getName()))&#123;</span><br><span class="line">            <span class="keyword">return</span> Proxy.newProxyInstance(proxy.getClass().getClassLoader(), <span class="keyword">new</span> Class[]&#123;IBinder.class, IInterface.class, <span class="keyword">this</span>.mIInterface&#125;,</span><br><span class="line">                    <span class="keyword">new</span> BinderHandler(mBase, mStub));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> method.invoke(mBase, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在这里我们将queryLocalInterface的对象返回成我们上面创建的伪造Manager对象就可以了。<br>最后我们只需要替换ServiceManager中缓存的IBinder对象就可以了，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Class&lt;?&gt; serviceManagerClass = Class.forName(<span class="string">"android.os.ServiceManager"</span>);</span><br><span class="line">    Method getServiceMethod = serviceManagerClass.getDeclaredMethod(<span class="string">"getService"</span>, String.class);</span><br><span class="line">    IBinder originIBinder = (IBinder)getServiceMethod.invoke(<span class="keyword">null</span>, Context.APP_OPS_SERVICE);</span><br><span class="line">    IBinder proxyBinder = (IBinder) Proxy.newProxyInstance(serviceManagerClass.getClassLoader(),</span><br><span class="line">                    <span class="keyword">new</span> Class[]&#123;IBinder.class&#125;,</span><br><span class="line">                    <span class="keyword">new</span> BinderProxyHandler(originIBinder));</span><br><span class="line"></span><br><span class="line">    Field cacheField = serviceManagerClass.getDeclaredField(<span class="string">"sCache"</span>);</span><br><span class="line">            cacheField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            Map&lt;String, IBinder&gt; cache = (Map)cacheField.get(<span class="keyword">null</span>);</span><br><span class="line">            cache.put(Context.APP_OPS_SERVICE, proxyBinder);</span><br><span class="line">&#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们可以验证一下，我们每次调用AppOpsManager里面的方法都会有Log输出调用的方法名，这样就实现了XXXManager的hook过程。<br>代码<a href="https://github.com/yf0994/Hook_binder" target="_blank" rel="external">附录</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/07/Hook-Ams和Pms/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hook--Ams和Pms</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Hook-Binder" data-title="Hook_Binder" data-url="http://fengyinlove.com/2016/08/04/Hook-Binder/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 fengyin
+    	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259762545'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1259762545%26show%3Dpic2' type='text/javascript'%3E%3C/script%3E"));</script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
